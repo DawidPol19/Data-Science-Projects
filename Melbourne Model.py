@@ -16,8 +16,8 @@ from sklearn.metrics import mean_absolute_error
 from sklearn.model_selection import train_test_split
 
 #Reading Files
-house_data = pd.read_csv(r"C:\Users\Lofu\Desktop\Python Machine Learning\Data Sets\House Prices train.csv", index_col="Id")
-X_test = pd.read_csv(r"C:\Users\Lofu\Desktop\Python Machine Learning\Data Sets\House Prices test.csv", index_col="Id")
+house_data = pd.read_csv("House Prices train.csv", index_col="Id")
+X_test = pd.read_csv("House Prices test.csv", index_col="Id")
 
 #Drop rows with missing targets, separating target from used predictors
 house_data.dropna(axis=0, subset=["SalePrice"], inplace=True)
