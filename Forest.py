@@ -28,7 +28,7 @@ from sklearn.metrics import accuracy_score
 from sklearn import model_selection
 #Importing Data#
 #forest_file_path = "C:\Users\Lofu\Desktop\Python Machine Learning\Kaggle Beginner Competition\train.csv"
-forest_data = pd.read_csv(r"C:\Users\Lofu\Desktop\Python Machine Learning\Kaggle Beginner Competition\train.csv")
+forest_data = pd.read_csv("train.csv")
 
 #Object Creation#
 y = forest_data.Cover_Type
