@@ -1,0 +1,517 @@
+#:kivy 1.0.9
+
+<CustomLabel>:
+    canvas.before:
+        Color:
+            rgba: (0.2, 0.2, 0.2, 1)
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+<ViewScreen>:
+    id: view
+    BoxLayout:
+        orientation: 'vertical'
+        BoxLayout:
+            BoxLayout:
+                orientation: 'vertical'
+                size_hint_x: 2
+                Label:
+                    text: 'View Data'
+                    size_hint_y: 0.1
+                RV:
+                    id: rv
+                    viewclass: 'CustomLabel'
+                    RecycleGridLayout:
+                        cols: 22
+                        spacing: 1
+                        do_scroll_x: True
+                        do_scroll_y: True
+                        default_size: None, dp(56)
+                        default_size_hint: 1, None
+                        size_hint_y: None
+                        size_hint_x: 4.4
+                        height: self.minimum_height
+                        orientation: 'vertical'
+                BoxLayout:
+                    size_hint_y: 0.1
+                    TextInput:
+                        id: viewtext
+                        halign: 'center'
+                        multiline: False
+                        text: '0-50'
+                    Button:
+                        text: 'Set ID Range'
+                        on_release: rv.change_range(viewtext.text)
+                    
+            BoxLayout:
+                orientation: 'vertical'
+                size_hint_x: 0.25
+                Button:
+                    text:'View'
+                    on_release: root.manager.current = 'view'
+                    background_color: (1.4, 1.4, 1.4, 1)
+                Button:
+                    text:'Modify'
+                    on_release: root.manager.current = 'modify'
+                Button:
+                    text:'Predict'
+                    on_release: root.manager.current = 'predict'
+                Button:
+                    text:'Graph'
+                    on_release: root.manager.current = 'graph'
+                    
+
+
+<ModifyScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        BoxLayout:
+            BoxLayout:
+                orientation: 'vertical'
+                size_hint_x: 2
+                Label:
+                    text:'Modify Selection'
+                Button:
+                    text: 'Add CSV to Database'
+                    on_release: root.manager.current = 'modifycsv'
+                Button:
+                    text: 'Custom SQL Command'
+                    on_release: root.manager.current = 'modifysql'
+                Button: 
+                    text: 'Retrain Model from Database'
+                    on_release: root.manager.current = 'modifyretrain'
+            BoxLayout:
+                orientation: 'vertical'
+                size_hint_x: 0.25
+                Button:
+                    text:'View'
+                    on_release: root.manager.current = 'view'
+                Button:
+                    text:'Modify'
+                    on_release: root.manager.current = 'modify'
+                    background_color: (1.4, 1.4, 1.4, 1)
+                Button:
+                    text:'Predict'
+                    on_release: root.manager.current = 'predict'
+                Button:
+                    text:'Graph'
+                    on_release: root.manager.current = 'graph'
+                    
+
+<ModifyScreenAddCsv>:
+    id: modifycsv
+    file_chooser: filechooser
+    progress_label: modifycsvlabel
+    on_leave: self.clear_label()
+    BoxLayout:
+        orientation: 'vertical'
+        BoxLayout:
+            BoxLayout:
+                size_hint_x: 2
+                orientation: 'vertical'
+                Label:
+                    size_hint_y: 0.1
+                    text: 'Add CSV File to Database'
+                FileChooserListView:
+                    id: filechooser
+                    on_submit: modifycsv.released(filechooser.selection[0])
+                Label:
+                    id: modifycsvlabel
+                    text: ''
+                    size_hint_y: 0.1
+                BoxLayout:
+                    size_hint_y: 0.1
+                    Button:
+                        text: 'Add to Database'
+                        on_press: modifycsv.press()
+                        on_release: modifycsv.released(filechooser.selection[0])
+                    Button:
+                        text: 'Back'
+                        on_release: root.manager.current = 'modify'
+            BoxLayout:
+                orientation: 'vertical'
+                size_hint_x: 0.25
+                Button:
+                    text:'View'
+                    on_release: root.manager.current = 'view'
+                Button:
+                    text:'Modify'
+                    on_release: root.manager.current = 'modify'
+                    background_color: (1.4, 1.4, 1.4, 1)
+                Button:
+                    text:'Predict'
+                    on_release: root.manager.current = 'predict'
+                Button:
+                    text:'Graph'
+                    on_release: root.manager.current = 'graph'
+                   
+<ModifyScreenCustomSQL>:
+    id: modifysql
+    progress_label: modifysqllabel
+    BoxLayout:
+        orientation: 'vertical'
+        BoxLayout:
+            BoxLayout:
+                size_hint_x: 2
+                orientation: 'vertical'
+                Label:
+                    size_hint_y: 0.1
+                    text: 'Custom SQL Command'
+                TextInput:
+                    id: sql_input
+                    multiline: True
+                    size_hint_y: 0.7
+                Label:
+                    id: modifysqllabel
+                    text: 'Type Your SQL Command'
+                    size_hint_y: 0.1
+                BoxLayout:
+                    size_hint_y: 0.1
+                    Button:
+                        text: 'Run SQL Script'
+                        on_press: modifysql.press()
+                        on_release: modifysql.run_custom_sql(sql_input.text)
+                    Button:
+                        text: 'Back'
+                        on_release: root.manager.current = 'modify'
+            BoxLayout:
+                orientation: 'vertical'
+                size_hint_x: 0.25
+                Button:
+                    text:'View'
+                    on_release: root.manager.current = 'view'
+                Button:
+                    text:'Modify'
+                    on_release: root.manager.current = 'modify'
+                    background_color: (1.4, 1.4, 1.4, 1)
+                Button:
+                    text:'Predict'
+                    on_release: root.manager.current = 'predict'
+                Button:
+                    text:'Graph'
+                    on_release: root.manager.current = 'graph'
+                
+                    
+<ModifyScreenRetrain>:
+    id: modifyretrain
+    progress_label: modifyretrainlabel
+    BoxLayout:
+        orientation: 'vertical'
+        BoxLayout:
+            BoxLayout:
+                size_hint_x: 2
+                orientation: 'vertical'
+                Label:
+                    size_hint_y: 0.1
+                    text: 'Retrain Model'
+                Label:
+                    id: modifyretrainlabel
+                    halign: 'center'
+                    size_hint_y: 0.8
+                BoxLayout:
+                    size_hint_y: 0.1
+                    Button: 
+                        text: 'Retrain Model'
+                        on_press: modifyretrain.press()
+                        on_release: modifyretrain.retrain_model()
+                    Button:
+                        text: 'Back'
+                        on_release: root.manager.current = 'modify'
+            BoxLayout:
+                orientation: 'vertical'
+                size_hint_x: 0.25
+                Button:
+                    text:'View'
+                    on_release: root.manager.current = 'view'
+                Button:
+                    text:'Modify'
+                    on_release: root.manager.current = 'modify'
+                    background_color: (1.4, 1.4, 1.4, 1)
+                Button:
+                    text:'Predict'
+                    on_release: root.manager.current = 'predict'
+                Button:
+                    text:'Graph'
+                    on_release: root.manager.current = 'graph'
+                
+            
+<PredictScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        BoxLayout:
+            BoxLayout:
+                orientation: 'vertical'
+                size_hint_x: 2
+                Label:
+                    text:'Choose Prediction Source'
+                Button:
+                    text: 'From Excel'
+                    on_release: root.manager.current = 'predictexcel'
+                Button:
+                    text: 'From CSV'
+                    on_release: root.manager.current = 'predictcsv'
+            BoxLayout:
+                orientation: 'vertical'
+                size_hint_x: 0.25
+                Button:
+                    text:'View'
+                    on_release: root.manager.current = 'view'
+                Button:
+                    text:'Modify'
+                    on_release: root.manager.current = 'modify'
+                Button:
+                    text:'Predict'
+                    on_release: root.manager.current = 'predict'
+                    background_color: (1.4, 1.4, 1.4, 1)
+                Button:
+                    text:'Graph'
+                    on_release: root.manager.current = 'graph'
+                    
+<PredictCSVScreen>:
+    id: predict_csv
+    file_chooser: filechooser
+    progress_label: comp_label
+    on_leave: predict_csv.clear_label()
+    BoxLayout:
+        BoxLayout:
+            orientation:'vertical'
+            size_hint_x: 2
+            Label:
+                text:'Select CSV File'
+                size_hint_y: 0.1
+            FileChooserListView:
+                id: filechooser
+                on_submit: predict_csv.released(filechooser.selection[0])
+            Label:
+                id: comp_label
+                size_hint_y: 0.2
+                text: ''
+            BoxLayout:
+                size_hint_y: 0.2
+                Button:
+                    text:'Run Prediction'
+                    on_press: predict_csv.pressed()
+                    on_release: predict_csv.released(filechooser.selection[0])
+                Button:
+                    text:'Cancel'
+                    on_release: root.manager.current = 'predict'
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_x: 0.25
+            Button:
+                text:'View'
+                on_release: root.manager.current = 'view'
+            Button:
+                text:'Modify'
+                on_release:root.manager.current = 'modify'
+            Button:
+                text:'Predict'
+                background_color: (1.4, 1.4, 1.4, 1)
+            Button:
+                text:'Graph'
+                on_release:root.manager.current = 'graph'
+                
+<PredictExcelScreen>:
+    id: predict_excel
+    file_chooser: filechooser 
+    progress_label: comp_label
+    on_leave: predict_excel.clear_label()
+    BoxLayout:
+        BoxLayout:
+            orientation:'vertical'
+            size_hint_x: 2
+            Label:
+                text:'Select Excel File'
+                size_hint_y: 0.1
+            FileChooserListView:
+                id: filechooser
+                on_submit: predict_excel.released(filechooser.selection[0])
+            Label:
+                id: comp_label
+                size_hint_y: 0.2
+                text: ''
+            BoxLayout:
+                size_hint_y: 0.2
+                Button:
+                    text:'Run Prediction'
+                    on_press: predict_excel.pressed()
+                    on_release: predict_excel.released(filechooser.selection[0])
+                Button:
+                    text:'Cancel'
+                    on_release: root.manager.current = 'predict'
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_x: 0.25
+            Button:
+                text:'View'
+                on_release: root.manager.current = 'view'
+            Button:
+                text:'Modify'
+                on_release:root.manager.current = 'modify'
+            Button:
+                text:'Predict'
+                background_color: (1.4, 1.4, 1.4, 1)
+            Button:
+                text:'Graph'
+                on_release:root.manager.current = 'graph'
+                  
+<SelectableLabel1>:
+    # Draw a background to indicate selection
+    canvas.before:
+        Color:
+            rgba: (.0, 0.3, .7, .8) if self.selected else (.2, .2, .2, 1)
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            
+<SelectableLabel2>:
+    # Draw a background to indicate selection
+    canvas.before:
+        Color:
+            rgba: (.0, 0.3, .7, .8) if self.selected else (.2, .2, .2, 1)
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+<GraphScreen>:
+    id: graphview
+    BoxLayout:
+        BoxLayout:
+            BoxLayout:
+                size_hint_x: 2
+                orientation: 'vertical'
+                Label:
+                    text:'Select Graph Data'
+                    size_hint_y: 0.1                    
+                GridLayout:
+                    size_hint_y: 0.8
+                    cols: 2
+                    spacing: 1
+                    Label:
+                        size_hint_y: 0.1
+                        text: 'X Axis'
+                        background_color: 0.1, 0.1, 0.1, 1
+                        canvas.before:
+                            Color:
+                                rgba: self.background_color
+                            Rectangle:
+                                size: self.size
+                                pos: self.pos
+                    Label:
+                        size_hint_y: 0.1
+                        text: 'Y Axis'
+                        background_color: 0.1, 0.1, 0.1, 1
+                        canvas.before:
+                            Color:
+                                rgba: self.background_color
+                            Rectangle:
+                                size: self.size
+                                pos: self.pos
+                    GraphRecycleView_1:
+                        size_hint_y: 0.9
+                        viewclass: 'SelectableLabel1'
+                        SelectableRecycleGridLayout:
+                            id: graph_recycle_1
+                            cols: 1
+                            spacing: 1
+                            default_size: None, dp(56)
+                            default_size_hint: 1, None
+                            size_hint_y: None
+                            height: self.minimum_height
+                            orientation: 'vertical'
+                            multiselect: False
+                            touch_multiselect: False
+                    
+                    GraphRecycleView_2:
+                        size_hint_y: 0.9
+                        viewclass: 'SelectableLabel2'
+                        SelectableRecycleGridLayout:
+                            id: graph_recycle_2
+                            cols: 1
+                            spacing: 1
+                            default_size: None, dp(56)
+                            default_size_hint: 1, None
+                            size_hint_y: None
+                            height: self.minimum_height
+                            orientation: 'vertical'
+                            multiselect: False
+                            touch_multiselect: False
+                Button:
+                    text: 'Create Graph'
+                    size_hint_y: 0.1
+                    on_press: graphview.create_graph()
+                    on_release: root.manager.current = 'graphdisplay'
+
+            BoxLayout:
+                orientation: 'vertical'
+                size_hint_x: 0.25
+                Button:
+                    text:'View'
+                    on_release: root.manager.current = 'view'
+                Button:
+                    text:'Modify'
+                    on_release: root.manager.current = 'modify'
+                Button:
+                    text:'Predict'
+                    on_release: root.manager.current = 'predict'
+                Button:
+                    text:'Graph'
+                    on_release: root.manager.current = 'graph'
+                    background_color: (1.4, 1.4, 1.4, 1)
+
+<GraphScreenDisplay>:
+    id: graph_screen_display
+    graph_img_id: graph_img
+    graph_display_text: graphdisplaytext
+    graph_display_label: graphdisplaylabel
+    on_enter: self.graph_img_id.reload()
+    on_leave: self.del_temp()
+    BoxLayout:
+        BoxLayout:
+            BoxLayout:
+                size_hint_x: 2
+                orientation: 'vertical'
+                Label:
+                    text:'View Graph'
+                    size_hint_y: 0.1
+                Image:
+                    id: graph_img
+                    size_hint_y: 0.7
+                    source: 'temp_graph.png'
+                    size: (500, 550) #self.texture_size
+                BoxLayout:
+                    orientation: 'vertical'
+                    size_hint_y: 0.2
+                    Label:
+                        id: graphdisplaylabel
+                        text: 'Graph File Name'
+                    TextInput:
+                        id: graphdisplaytext
+                        halign: 'center'
+                        multiline: False
+                        text: 'Saved_Figure.png'   
+                BoxLayout:
+                    size_hint_y: 0.1
+                    Button:
+                        text: 'Save Figure'
+                        on_release: graph_screen_display.save_figure(graphdisplaytext.text)
+                    Button:
+                        text: 'Back'
+                        on_release: root.manager.current = 'graph'
+            BoxLayout:
+                orientation: 'vertical'
+                size_hint_x: 0.25
+                Button:
+                    text:'View'
+                    on_release: root.manager.current = 'view'
+                Button:
+                    text:'Modify'
+                    on_release: root.manager.current = 'modify'
+                Button:
+                    text:'Predict'
+                    on_release: root.manager.current = 'predict'
+                Button:
+                    text:'Graph'
+                    on_release: root.manager.current = 'graph'
+                    background_color: (1.4, 1.4, 1.4, 1)
