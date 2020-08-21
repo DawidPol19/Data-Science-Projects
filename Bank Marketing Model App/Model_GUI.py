@@ -6,7 +6,7 @@ Created on Thu Jul 30 19:02:36 2020
 
 #########Paths#################################################################
 #Put the path of where the folder is located for the file chooser
-path = 'D:\\Files\\Documents\\Python Machine Learning\\Data Sets\\Production Code'
+path = 'C:\\Program Files'
 preds_path = 'Predictions'
 graph_path = 'Graphs'
 
